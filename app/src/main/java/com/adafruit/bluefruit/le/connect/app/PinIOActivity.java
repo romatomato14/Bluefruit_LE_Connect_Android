@@ -30,6 +30,8 @@ import com.adafruit.bluefruit.le.connect.ui.utils.ExpandableHeightExpandableList
 
 import java.util.ArrayList;
 
+import static android.R.attr.value;
+
 public class PinIOActivity extends UartInterfaceActivity {
     // Log
     private final static String TAG = UartActivity.class.getSimpleName();
@@ -55,7 +57,8 @@ public class PinIOActivity extends UartInterfaceActivity {
     private static final int kUartStatus_QueryCapabilities = 1;
     private static final int kUartStatus_QueryAnalogMapping = 2;
 
-    private class PinData {
+    public class PinData {
+        //Maria made this public
         private static final int kMode_Unknown = 255;
         private static final int kMode_Input = 0;
         private static final int kMode_Output = 1;
@@ -609,7 +612,8 @@ public class PinIOActivity extends UartInterfaceActivity {
         return receivedPinStateDataBuffer2.get(index) & 0xff;
     }
 
-    private void receivedPinState(byte[] data) {
+    public void receivedPinState(byte[] data) {
+        //MADE PUBLIC BY MARIA
 
         // Append received bytes to buffer
         for (final byte dataByte : data) {
@@ -698,6 +702,7 @@ public class PinIOActivity extends UartInterfaceActivity {
                     if (index >= 0) {
                         PinData pin = mPins.get(index);
                         pin.analogValue = value;
+                        System.out.println("received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
                         Log.d(TAG, "received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
                     } else {
                         Log.d(TAG, "Warning: received pinstate for unknown analog pin id: " + index);
@@ -729,6 +734,11 @@ public class PinIOActivity extends UartInterfaceActivity {
                 mPinListAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public int getAnalogValue() {
+        System.out.println(value);
+                return value;
     }
 
     private void updatePinsForReceivedStates(int pinStates, int port) {
@@ -797,7 +807,8 @@ public class PinIOActivity extends UartInterfaceActivity {
                 break;
         }
 
-        setControlMode(pinData, newMode);
+        //setControlMode(pinData, newMode); Maria commented this out
+        setControlMode(pinData, PinData.kMode_Analog); //This line should be outside of onClick
 
         mPinListAdapter.notifyDataSetChanged();
     }
@@ -975,6 +986,7 @@ public class PinIOActivity extends UartInterfaceActivity {
             TextView modeTextView = (TextView) convertView.findViewById(R.id.modeTextView);
             modeTextView.setText(stringForPinMode(pin.mode));
 
+
             // UI: State
             TextView valueTextView = (TextView) convertView.findViewById(R.id.stateTextView);
             String valueString;
@@ -987,6 +999,10 @@ public class PinIOActivity extends UartInterfaceActivity {
                     break;
                 case PinData.kMode_Analog:
                     valueString = String.valueOf(pin.analogValue);
+                    if (pin.analogValue > 10) {
+                        Intent intent = new Intent(PinIOActivity.this, PhotoLauncher.class);
+                        final int REQUEST_CODE = 1;  // The request code
+                        startActivityForResult(intent, REQUEST_CODE);}
                     break;
                 case PinData.kMode_PWM:
                     valueString = String.valueOf(pin.analogValue);

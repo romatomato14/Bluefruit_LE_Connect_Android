@@ -3,6 +3,16 @@
     package="com.adafruit.bluefruit.le.connect">
 
     <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
@@ -175,7 +185,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.adafruit.bluefruit.le.connect.app.neopixel.NeopixelActivity" />
         </activity>
-
+        <activity
+            android:name=".app.PhotoLauncher"
+            android:label="@string/title_activity_photo_launcher"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".app.QuadrantMenu"
+            android:label="@string/title_activity_quadrant_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

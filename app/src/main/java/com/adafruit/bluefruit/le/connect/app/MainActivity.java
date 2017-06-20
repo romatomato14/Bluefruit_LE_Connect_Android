@@ -97,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
             R.string.scan_connectservice_controller,
             R.string.scan_connectservice_beacon,
             R.string.scan_connectservice_neopixel,
+            R.string.scan_connectservice_photo,
+            //R.string.scan_connectservice_quadrant,
+
+
     };
 
     // Activity request codes (used for onActivityResult)
@@ -640,6 +644,10 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
                             }
                             case R.string.scan_connectservice_neopixel: {       // Neopixel
                                 mComponentToStartWhenConnected = NeopixelActivity.class;
+                                break;
+                            }
+                            case R.string.scan_connectservice_photo: { //PhotoLauncher
+                                mComponentToStartWhenConnected = PhotoLauncher.class;
                                 break;
                             }
                         }
@@ -1636,7 +1644,7 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
             }
 
             Spanned result;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 result = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
             } else {
                 result = Html.fromHtml(text);
