@@ -79,6 +79,8 @@ public class PinIOActivity extends UartInterfaceActivity {
     private Display mDisplay;
     private PowerManager.WakeLock mWakeLock;
 
+    public int quad;
+
     private class PinData {
         private static final int kMode_Unknown = 255;
         private static final int kMode_Input = 0;
@@ -407,6 +409,7 @@ public class PinIOActivity extends UartInterfaceActivity {
             {
                 float x = getPosX(0);
                 float y = getPosY(0);
+                quad = 0;
 
 //                PinData pin = mPins.get(19);
 //                int store = pin.analogValue;
@@ -414,22 +417,23 @@ public class PinIOActivity extends UartInterfaceActivity {
                 if (y>0 && x>0) {
                     //System.out.println("quad 1");
                     mSimulationView.setBackgroundResource(R.drawable.quad1);
+                    quad = 1;
                     //CameraLaunch.MainActivity.onCreate();
                 }
                 else if (y>0 && x<0) {
                     //System.out.println("quad 2");
                     mSimulationView.setBackgroundResource(R.drawable.quad2);
-                    Intent intent = new Intent(PinIOActivity.this, UartActivity.class);
-                    final int REQUEST_CODE = 1;  // The request code
-                    startActivityForResult(intent, REQUEST_CODE);
+                    quad = 2;
                 }
                 else if (y<0 && x<0) {
                     //System.out.println("quad 3");
                     mSimulationView.setBackgroundResource(R.drawable.quad3);
+                    quad = 3;
                 }
                 else {
                     //System.out.println("quad 4");
                     mSimulationView.setBackgroundResource(R.drawable.quad4);
+                    quad = 4;
                 }
             }
 
@@ -937,7 +941,8 @@ public class PinIOActivity extends UartInterfaceActivity {
         for (int i = 0; i < mPins.size(); i++) {
             // Write pin mode
             PinData pin = mPins.get(i);
-            setControlMode(pin, pin.mode);
+            //setControlMode(pin, pin.mode);
+            setControlMode(pin, pin.kMode_Analog);
         }
     }
 
@@ -1011,6 +1016,7 @@ public class PinIOActivity extends UartInterfaceActivity {
 
             // Store
             pin.analogValue = value;
+            System.out.println("sausen want to know"+value);
 
             // Send
             byte data0 = (byte) (0xe0 + pin.digitalPinId);
@@ -1114,14 +1120,26 @@ public class PinIOActivity extends UartInterfaceActivity {
                     * 1  analog least significant 7 bits
                     * 2  analog most significant 7 bits
                     */
-
+                    System.out.println ("THIS IS ANALOG");
                     int analogPinId = getUnsignedReceivedPinState(0) - 0xe0;
                     int value = getUnsignedReceivedPinState(1) + (getUnsignedReceivedPinState(2) << 7);
 
                     int index = indexOfPinWithAnalogId(analogPinId);
+                    System.out.println ("INDEX IS"+index);
                     if (index >= 0) {
                         PinData pin = mPins.get(index);
                         pin.analogValue = value;
+                        if (value > 800 && quad==1)
+                        {
+                            System.out.println("PUSH" + value);
+                            Intent intent = new Intent(PinIOActivity.this, UartActivity.class);
+                            final int REQUEST_CODE = 1;  // The request code
+                            startActivityForResult(intent, REQUEST_CODE);
+
+                        }
+                        else if (value > 800 && quad==2){}
+                        else if (value > 800 && quad == 3){}
+                        else if (value > 800 && quad == 4){}
                         Log.d(TAG, "received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
                     } else {
                         Log.d(TAG, "Warning: received pinstate for unknown analog pin id: " + index);
@@ -1591,7 +1609,7 @@ public class PinIOActivity extends UartInterfaceActivity {
         }
     }
 
-    private void saveRetainedDataFragment() {
+      private void saveRetainedDataFragment() {
         mRetainedDataFragment.mPins = mPins;
     }
     // endregion
