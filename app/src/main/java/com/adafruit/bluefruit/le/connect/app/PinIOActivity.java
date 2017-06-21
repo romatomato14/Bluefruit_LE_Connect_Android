@@ -23,7 +23,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,14 +134,9 @@ public class PinIOActivity extends UartInterfaceActivity {
         //setContentView(R.layout.activity_pin_io);
         //setContentView(R.layout.activity_uart);
 
-        // instantiate our simulation view and set it as the activity's content
-//        mAPA = new AccelerometerPlayActivity();
-//        mSimulationView = mAPA.new SimulationView(mAPA);
-//        mSimulationView.setBackgroundResource(R.drawable.menuplain);
-//        setContentView(mSimulationView);
-
         mBleManager = BleManager.getInstance(this);
         restoreRetainedDataFragment();
+        System.out.print("Sausen test no 1");
 
         //added
         // Get an instance of the SensorManager
@@ -165,14 +159,14 @@ public class PinIOActivity extends UartInterfaceActivity {
         setContentView(mSimulationView);
 
         // UI
-//        mPinListView = (ExpandableHeightExpandableListView) findViewById(R.id.pinListView);
-//        mPinListAdapter = new ExpandableListAdapter();
-//        mPinListView.setAdapter(mPinListAdapter);
-//        mPinListView.setExpanded(true);
-//
-//        mPinScrollView = (ScrollView) findViewById(R.id.pinScrollView);
-//
-//        mIsActivityFirstRun = savedInstanceState == null;
+        //mPinListView = (ExpandableHeightExpandableListView) findViewById(R.id.pinListView);
+        mPinListAdapter = new ExpandableListAdapter();
+        //mPinListView.setAdapter(mPinListAdapter);
+        //mPinListView.setExpanded(true);
+
+        //mPinScrollView = (ScrollView) findViewById(R.id.pinScrollView);
+
+        mIsActivityFirstRun = savedInstanceState == null;
 
         // Start services
         onServicesDiscovered();
@@ -414,8 +408,8 @@ public class PinIOActivity extends UartInterfaceActivity {
                 float x = getPosX(0);
                 float y = getPosY(0);
 
-                //onClickMode(); //forces all pins to be set as analog
-//                PinData pin = mPins.get (groupPosition);
+//                PinData pin = mPins.get(19);
+//                int store = pin.analogValue;
 
                 if (y>0 && x>0) {
                     //System.out.println("quad 1");
@@ -425,6 +419,9 @@ public class PinIOActivity extends UartInterfaceActivity {
                 else if (y>0 && x<0) {
                     //System.out.println("quad 2");
                     mSimulationView.setBackgroundResource(R.drawable.quad2);
+                    Intent intent = new Intent(PinIOActivity.this, UartActivity.class);
+                    final int REQUEST_CODE = 1;  // The request code
+                    startActivityForResult(intent, REQUEST_CODE);
                 }
                 else if (y<0 && x<0) {
                     //System.out.println("quad 3");
@@ -579,30 +576,30 @@ public class PinIOActivity extends UartInterfaceActivity {
 //        return true;
 //    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_help) {
-            startHelp();
-            return true;
-        } else if (id == R.id.action_connected_settings) {
-            startConnectedSettings();
-            return true;
-        } else if (id == R.id.action_refreshcache) {
-            if (mBleManager != null) {
-                mBleManager.refreshDeviceCache();
-            }
-        } else if (id == R.id.action_query) {
-            reset();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_help) {
+//            startHelp();
+//            return true;
+//        } else if (id == R.id.action_connected_settings) {
+//            startConnectedSettings();
+//            return true;
+//        } else if (id == R.id.action_refreshcache) {
+//            if (mBleManager != null) {
+//                mBleManager.refreshDeviceCache();
+//            }
+//        } else if (id == R.id.action_query) {
+//            reset();
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void startConnectedSettings() {
         // Launch connected settings activity
@@ -926,8 +923,8 @@ public class PinIOActivity extends UartInterfaceActivity {
         }
     }
 
-    private void enableReadReports() {
-
+    private void enableReadReports()
+    {
         // Enable read reports by port
         for (int i = 0; i <= 2; i++) {
             byte data0 = (byte) (0xd0 + i);     // start port 0 digital reporting (0xD0 + port#)
@@ -941,7 +938,6 @@ public class PinIOActivity extends UartInterfaceActivity {
             // Write pin mode
             PinData pin = mPins.get(i);
             setControlMode(pin, pin.mode);
-            setControlMode(pin, PinData.kMode_Analog);
         }
     }
 
@@ -1205,7 +1201,6 @@ public class PinIOActivity extends UartInterfaceActivity {
         }
     }
 
-
     public void onClickMode(View view) {
         PinData pinData = (PinData) view.getTag();
 
@@ -1378,7 +1373,7 @@ public class PinIOActivity extends UartInterfaceActivity {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.layout_pinio_item_title, parent, false);
+                System.out.println ("Sausen we are right before where we want to be");
             }
 
             // Tag
@@ -1389,8 +1384,8 @@ public class PinIOActivity extends UartInterfaceActivity {
 
             // UI: Name
             TextView nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-
-            String name;
+//
+           String name;
             if (pin.isAnalog) {
                 name = String.format(getString(R.string.pinio_pinname_analog_format), pin.digitalPinId, pin.analogPinId);
             } else {
@@ -1414,10 +1409,8 @@ public class PinIOActivity extends UartInterfaceActivity {
                     break;
                 case PinData.kMode_Analog:
                     valueString = String.valueOf(pin.analogValue);
-                    if (pin.analogValue > 10) {
-                        Intent intent = new Intent(PinIOActivity.this, UartActivity.class);
-                        final int REQUEST_CODE = 1;  // The request code
-                        startActivityForResult(intent, REQUEST_CODE);}
+                    if (pin.analogValue > 10)
+                        System.out.println("HI SAUSEN" + pin.analogValue);
                     break;
                 case PinData.kMode_PWM:
                     valueString = String.valueOf(pin.analogValue);
@@ -1590,6 +1583,7 @@ public class PinIOActivity extends UartInterfaceActivity {
 
             // Init variables
             mPins = new ArrayList<>();
+            System.out.println ("sausen test no 2");
 
         } else {
             // Restore status
