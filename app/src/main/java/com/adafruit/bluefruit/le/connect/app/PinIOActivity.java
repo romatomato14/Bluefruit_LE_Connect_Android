@@ -5,9 +5,13 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +19,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +49,8 @@ import com.adafruit.bluefruit.le.connect.ble.BleUtils;
 import com.adafruit.bluefruit.le.connect.ui.utils.ExpandableHeightExpandableListView;
 
 import java.util.ArrayList;
+
+import static com.adafruit.bluefruit.le.connect.R.drawable.*;
 
 public class PinIOActivity extends UartInterfaceActivity {
     // Log
@@ -80,6 +87,8 @@ public class PinIOActivity extends UartInterfaceActivity {
     private PowerManager.WakeLock mWakeLock;
 
     public int quad;
+    public int progressCount;
+    public boolean isStretched;
 
     private class PinData {
         private static final int kMode_Unknown = 255;
@@ -157,7 +166,7 @@ public class PinIOActivity extends UartInterfaceActivity {
 
         //instantiate our simulation view and set it as the activity's content
         mSimulationView = new SimulationView(this);
-        mSimulationView.setBackgroundResource(R.drawable.menuplain);
+        mSimulationView.setBackgroundResource(menu);
         setContentView(mSimulationView);
 
         // UI
@@ -309,7 +318,6 @@ public class PinIOActivity extends UartInterfaceActivity {
                  */
                 for (int i = 0; i < mBalls.length; i++) {
                     mBalls[i] = new PinIOActivity.SimulationView.Particle(getContext());
-                    mBalls[i].setBackgroundResource(R.drawable.transparent);
                     mBalls[i].setLayerType(LAYER_TYPE_HARDWARE, null);
                     addView(mBalls[i], new ViewGroup.LayoutParams(mDstWidth, mDstHeight));
                 }
@@ -414,25 +422,28 @@ public class PinIOActivity extends UartInterfaceActivity {
 //                PinData pin = mPins.get(19);
 //                int store = pin.analogValue;
 
-                if (y>0 && x>0) {
+
+
+                if (y>0 && x>0 && progressCount > 5) {
                     //System.out.println("quad 1");
-                    mSimulationView.setBackgroundResource(R.drawable.quad1);
+                    //mSimulationView.setBackgroundResource(high1);
+                    mSimulationView.setBackgroundResource(R.drawable.fullprog);
                     quad = 1;
                     //CameraLaunch.MainActivity.onCreate();
                 }
                 else if (y>0 && x<0) {
                     //System.out.println("quad 2");
-                    mSimulationView.setBackgroundResource(R.drawable.quad2);
+                    //mSimulationView.setBackgroundResource(high2);
                     quad = 2;
                 }
                 else if (y<0 && x<0) {
                     //System.out.println("quad 3");
-                    mSimulationView.setBackgroundResource(R.drawable.quad3);
+                    //mSimulationView.setBackgroundResource(high3);
                     quad = 3;
                 }
                 else {
                     //System.out.println("quad 4");
-                    mSimulationView.setBackgroundResource(R.drawable.quad4);
+                    //mSimulationView.setBackgroundResource(high4);
                     quad = 4;
                 }
             }
@@ -1120,28 +1131,74 @@ public class PinIOActivity extends UartInterfaceActivity {
                     * 1  analog least significant 7 bits
                     * 2  analog most significant 7 bits
                     */
-                    System.out.println ("THIS IS ANALOG");
                     int analogPinId = getUnsignedReceivedPinState(0) - 0xe0;
                     int value = getUnsignedReceivedPinState(1) + (getUnsignedReceivedPinState(2) << 7);
 
-                    int index = indexOfPinWithAnalogId(analogPinId);
-                    System.out.println ("INDEX IS"+index);
-                    if (index >= 0) {
+                    int index = indexOfPinWithAnalogId(analogPinId);;
+
+                    if (index == 10 || index == 11) {
                         PinData pin = mPins.get(index);
                         pin.analogValue = value;
                         if (value > 800 && quad==1)
                         {
-                            System.out.println("PUSH" + value);
-                            Intent intent = new Intent(PinIOActivity.this, UartActivity.class);
-                            final int REQUEST_CODE = 1;  // The request code
-                            startActivityForResult(intent, REQUEST_CODE);
+                            progressCount++;
+                            System.out.println ("INDEX IS"+index);
+                            //try camera launch
+                            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            try {
+                                PackageManager pm = this.getPackageManager();
+
+                                final ResolveInfo mInfo = pm.resolveActivity(i, 0);
+
+                                Intent intent = new Intent();
+                                intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+                                intent.setAction(Intent.ACTION_MAIN);
+                                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+                                startActivity(intent);
+                            } catch (Exception e){ Log.i(TAG, "Unable to launch camera: " + e); }
 
                         }
-                        else if (value > 800 && quad==2){}
-                        else if (value > 800 && quad == 3){}
-                        else if (value > 800 && quad == 4){}
+                        else if (value > 800 && quad==2)
+                        {
+                            progressCount++;
+                            Intent intent = new Intent("android.intent.category.LAUNCHER");
+                            intent.setClassName("com.facebook.katana", "com.facebook.katana.LoginActivity");
+                            startActivity(intent);
+                        }
+                        else if (value > 800 && quad == 3)
+                        {
+                            //try youtube launch
+                            progressCount++;
+
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" ));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);}
+                            catch (ActivityNotFoundException e) {
+                                // youtube is not installed.Will be opened in other available apps
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/watch?v="));
+                                startActivity(i);}
+                        }
+                        else if (value > 800 && quad == 4)
+                        {
+                            progressCount++;
+                            Intent myIntent = new Intent(this, MediaService.class);
+                            startActivity(myIntent);
+                        }
+
                         Log.d(TAG, "received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
-                    } else {
+                    } else if (index > 0)
+                    {
+                        System.out.println("INDEX of POTENTIAL "+index+" AND VALAUE"+value);
+                        if (value < 400) {
+                            progressCount++;
+                            isStretched = true;
+                        }
+
+
+                    }
+                        else {
                         Log.d(TAG, "Warning: received pinstate for unknown analog pin id: " + index);
                     }
                 }

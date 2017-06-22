@@ -117,7 +117,7 @@ public class QuadrantMenu extends AppCompatActivity {
 
                 // instantiate our simulation view and set it as the activity's content
                 mSimulationView = new SimulationView(this);
-                mSimulationView.setBackgroundResource(R.drawable.menuplain);
+                //mSimulationView.setBackgroundResource(R.drawable.menuplain);
                 setContentView(mSimulationView);
 
                 //Maria added this code

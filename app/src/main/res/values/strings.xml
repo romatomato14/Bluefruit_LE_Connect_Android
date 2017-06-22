@@ -53,7 +53,7 @@
     <string name="scan_connectservice_neopixel">Neopixel</string>
     <string name="scan_connectservice_photo">Photo</string>
     <string name="scan_connectservice_quadrant">Quadrant</string>
-    <string name="scan_connectservice_pinio">Pinio</string>
+    <string name="scan_connectservice_touchFree">Pinio</string>
     <string name="scan_softwareupdate_title">Update available</string>
     <string name="scan_softwareupdate_messageformat">Software version %s is available</string>
     <string name="scan_bootloaderandfirmwareupdate_messageformat">Software version %1$s and Bootloader version %2$s are available. This is a two-step process: bootloader will be updated first and firmware the next time you connect to the device</string>
@@ -147,7 +147,7 @@
     <string name="uart_text_dataomitted">(Previous data omitted to improve performance…)</string>
 
     <!-- PinIO Activity -->
-    <string name="title_activity_pin_io">PinIO</string>
+    <string name="title_activity_pin_io">HandleBar</string>
     <string name="pinio_sectiontitle">AVAILABLE PINS</string>
     <string name="pinio_pintype_input">Input</string>
     <string name="pinio_pintype_unknown">Unknown</string>
@@ -430,6 +430,7 @@
     <string name="dialog_dontshowagain">Don\'t show again</string>
     <string name="title_activity_photo_launcher">PhotoLauncher</string>
     <string name="title_activity_quadrant_menu">QuadrantMenu</string>
+    <string name="title_activity_media_service">MediaService</string>
 
     <!-- Debug -->
 

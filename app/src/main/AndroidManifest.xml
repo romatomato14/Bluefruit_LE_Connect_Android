@@ -100,6 +100,14 @@
                 android:value="com.adafruit.bluefruit.le.connect.app.MainActivity" />
         </activity>
         <activity
+            android:name="app.MediaService"
+            android:label="@string/title_activity_media_service"
+            android:screenOrientation="fullUser">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.adafruit.bluefruit.le.connect.app.MainActivity" />
+        </activity>
+        <activity
             android:name=".app.ControllerActivity"
             android:label="@string/title_activity_controller"
             android:parentActivityName=".app.MainActivity"
@@ -192,6 +200,10 @@
         <activity
             android:name=".app.QuadrantMenu"
             android:label="@string/title_activity_quadrant_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".app.MediaService"
+            android:label="@string/title_activity_media_service"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -54,7 +54,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adafruit.bluefruit.le.connect.R;
-import com.adafruit.bluefruit.le.connect.app.neopixel.NeopixelActivity;
 import com.adafruit.bluefruit.le.connect.app.settings.SettingsActivity;
 import com.adafruit.bluefruit.le.connect.app.update.FirmwareUpdater;
 import com.adafruit.bluefruit.le.connect.app.update.ReleasesParser;
@@ -93,12 +92,12 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
     private final static int kComponentsNameIds[] = {
             R.string.scan_connectservice_info,
             R.string.scan_connectservice_uart,
-            R.string.scan_connectservice_pinio,
+            R.string.scan_connectservice_touchFree,
             R.string.scan_connectservice_controller,
             R.string.scan_connectservice_beacon,
             R.string.scan_connectservice_neopixel,
             R.string.scan_connectservice_photo,
-            //R.string.scan_connectservice_quadrant,
+            R.string.scan_connectservice_quadrant,
 
 
     };
@@ -618,49 +617,51 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
         for (int i = 0; i < kComponentsNameIds.length; i++)
             items[i] = getString(kComponentsNameIds[i]);
 
-        builder.setTitle(title)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (kComponentsNameIds[which]) {
-                            case R.string.scan_connectservice_info: {          // Info
-                                mComponentToStartWhenConnected = InfoActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_uart: {           // Uart
-                                mComponentToStartWhenConnected = UartActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_pinio: {        // PinIO
-                                mComponentToStartWhenConnected = PinIOActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_controller: {    // Controller
-                                mComponentToStartWhenConnected = ControllerActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_beacon: {        // Beacon
-                                mComponentToStartWhenConnected = BeaconActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_neopixel: {       // Neopixel
-                                mComponentToStartWhenConnected = NeopixelActivity.class;
-                                break;
-                            }
-                            case R.string.scan_connectservice_photo: { //PhotoLauncher
-                                mComponentToStartWhenConnected = PhotoLauncher.class;
-                                break;
-                            }
-                        }
+        mComponentToStartWhenConnected = PinIOActivity.class;
+//
+//        builder.setTitle(title)
+//                .setItems(items, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (kComponentsNameIds[which]) {
+//                            case R.string.scan_connectservice_info: {          // Info
+//                                mComponentToStartWhenConnected = InfoActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_uart: {           // Uart
+//                                mComponentToStartWhenConnected = UartActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_touchFree: {        // PinIO
+//                                mComponentToStartWhenConnected = PinIOActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_controller: {    // Controller
+//                                mComponentToStartWhenConnected = ControllerActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_beacon: {        // Beacon
+//                                mComponentToStartWhenConnected = BeaconActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_neopixel: {       // Neopixel
+//                                mComponentToStartWhenConnected = NeopixelActivity.class;
+//                                break;
+//                            }
+//                            case R.string.scan_connectservice_photo: { //PhotoLauncher
+//                                mComponentToStartWhenConnected = PhotoLauncher.class;
+//                                break;
+//                            }
+//                        }
 
                         if (mComponentToStartWhenConnected != null) {
                             connect(deviceData.device);            // First connect to the device, and when connected go to selected activity
                         }
-                    }
-                });
+//                    }
+//                });
 
         // Show dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        //AlertDialog dialog = builder.create();
+        //dialog.show();
     }
 
     private boolean manageBluetoothAvailability() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="songName" type="id" />
+    <item name="songDuration" type="id" />
+    <item name="seekBar" type="id" />
+</resources>
