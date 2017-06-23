@@ -419,37 +419,55 @@ public class PinIOActivity extends UartInterfaceActivity {
                 float y = getPosY(0);
                 quad = 0;
 
-//                PinData pin = mPins.get(19);
-//                int store = pin.analogValue;
-
-
-
-                if (y>0 && x>0 && progressCount > 5) {
-                    //System.out.println("quad 1");
-                    //mSimulationView.setBackgroundResource(high1);
-                    mSimulationView.setBackgroundResource(R.drawable.fullprog);
+                if (y>0 && x>0) {
                     quad = 1;
-                    //CameraLaunch.MainActivity.onCreate();
+                    if (progressCount == 0)
+                        mSimulationView.setBackgroundResource(R.drawable.menu1);
+                    else if (progressCount >= 5)
+                        mSimulationView.setBackgroundResource(R.drawable.menu11);
+                    else if (progressCount >= 6)
+                        mSimulationView.setBackgroundResource(R.drawable.menu111);
+                    else if (progressCount >= 7)
+                        mSimulationView.setBackgroundResource(R.drawable.menu1111);
                 }
                 else if (y>0 && x<0) {
-                    //System.out.println("quad 2");
-                    //mSimulationView.setBackgroundResource(high2);
                     quad = 2;
+                    if (progressCount == 0)
+                        mSimulationView.setBackgroundResource(R.drawable.menu2);
+                    else if (progressCount >= 5)
+                        mSimulationView.setBackgroundResource(R.drawable.menu22);
+                    else if (progressCount >= 6)
+                        mSimulationView.setBackgroundResource(R.drawable.menu222);
+                    else if (progressCount >= 7)
+                        mSimulationView.setBackgroundResource(R.drawable.menu2222);
+
                 }
                 else if (y<0 && x<0) {
-                    //System.out.println("quad 3");
-                    //mSimulationView.setBackgroundResource(high3);
                     quad = 3;
+                    if (progressCount == 0)
+                        mSimulationView.setBackgroundResource(R.drawable.menu3);
+                    else if (progressCount >= 5)
+                        mSimulationView.setBackgroundResource(R.drawable.menu33);
+                    else if (progressCount >= 6)
+                        mSimulationView.setBackgroundResource(R.drawable.menu333);
+                    else if (progressCount >= 7)
+                        mSimulationView.setBackgroundResource(R.drawable.menu3333);
+
                 }
                 else {
-                    //System.out.println("quad 4");
-                    //mSimulationView.setBackgroundResource(high4);
                     quad = 4;
+                    if (progressCount == 0)
+                        mSimulationView.setBackgroundResource(R.drawable.menu4);
+                    else if (progressCount >= 5)
+                        mSimulationView.setBackgroundResource(R.drawable.menu44);
+                    else if (progressCount >= 6)
+                        mSimulationView.setBackgroundResource(R.drawable.menu444);
+                    else if (progressCount >= 7)
+                        mSimulationView.setBackgroundResource(R.drawable.menu4444);
                 }
             }
 
         }
-
 
         public void startSimulation()
         {
