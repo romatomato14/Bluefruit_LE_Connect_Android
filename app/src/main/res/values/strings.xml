@@ -2,7 +2,7 @@
 <resources>
 
     <!-- General -->
-    <string name="app_name">Bluefruit LE</string>
+    <string name="app_name">HandleBar</string>
     <string name="app_full_name">Bluefruit LE Connect</string>
     <string name="action_info">Info</string>
     <string name="action_mqttsettings">MQTT</string>

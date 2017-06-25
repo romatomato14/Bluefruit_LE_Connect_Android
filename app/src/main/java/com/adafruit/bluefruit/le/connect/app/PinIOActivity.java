@@ -440,7 +440,6 @@ public class PinIOActivity extends UartInterfaceActivity {
                         mSimulationView.setBackgroundResource(R.drawable.menu222);
                     else if (progressCount >= 7)
                         mSimulationView.setBackgroundResource(R.drawable.menu2222);
-
                 }
                 else if (y<0 && x<0) {
                     quad = 3;
@@ -452,7 +451,6 @@ public class PinIOActivity extends UartInterfaceActivity {
                         mSimulationView.setBackgroundResource(R.drawable.menu333);
                     else if (progressCount >= 7)
                         mSimulationView.setBackgroundResource(R.drawable.menu3333);
-
                 }
                 else {
                     quad = 4;
