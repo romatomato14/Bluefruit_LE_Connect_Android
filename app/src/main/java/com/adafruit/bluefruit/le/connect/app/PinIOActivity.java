@@ -1152,10 +1152,10 @@ public class PinIOActivity extends UartInterfaceActivity {
 
                     int index = indexOfPinWithAnalogId(analogPinId);;
 
-                    if (index == 10 || index == 11) {
+                    if (index == 11) {
                         PinData pin = mPins.get(index);
                         pin.analogValue = value;
-                        if (value > 800 && quad==1)
+                        if (value > 550 && quad==1)
                         {
                             progressCount++;
                             System.out.println ("INDEX IS"+index);
@@ -1175,14 +1175,14 @@ public class PinIOActivity extends UartInterfaceActivity {
                             } catch (Exception e){ Log.i(TAG, "Unable to launch camera: " + e); }
 
                         }
-                        else if (value > 800 && quad==2)
+                        else if (value > 550 && quad==2)
                         {
                             progressCount++;
                             Intent intent = new Intent("android.intent.category.LAUNCHER");
                             intent.setClassName("com.facebook.katana", "com.facebook.katana.LoginActivity");
                             startActivity(intent);
                         }
-                        else if (value > 800 && quad == 3)
+                        else if (value > 550 && quad == 3)
                         {
                             //try youtube launch
                             progressCount++;
@@ -1196,7 +1196,7 @@ public class PinIOActivity extends UartInterfaceActivity {
                                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/watch?v="));
                                 startActivity(i);}
                         }
-                        else if (value > 800 && quad == 4)
+                        else if (value > 550 && quad == 4)
                         {
                             progressCount++;
                             Intent myIntent = new Intent(this, MediaService.class);
@@ -1204,15 +1204,65 @@ public class PinIOActivity extends UartInterfaceActivity {
                         }
 
                         Log.d(TAG, "received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
-                    } else if (index > 0)
+                    }else if (index == 10) {
+                        PinData pin = mPins.get(index);
+                        pin.analogValue = value;
+                        if (value > 340 && quad==1)
+                        {
+                            progressCount++;
+                            System.out.println ("INDEX IS"+index);
+                            //try camera launch
+                            Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            try {
+                                PackageManager pm = this.getPackageManager();
+
+                                final ResolveInfo mInfo = pm.resolveActivity(i, 0);
+
+                                Intent intent = new Intent();
+                                intent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
+                                intent.setAction(Intent.ACTION_MAIN);
+                                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+                                startActivity(intent);
+                            } catch (Exception e){ Log.i(TAG, "Unable to launch camera: " + e); }
+
+                        }
+                        else if (value > 340 && quad==2)
+                        {
+                            progressCount++;
+                            Intent intent = new Intent("android.intent.category.LAUNCHER");
+                            intent.setClassName("com.facebook.katana", "com.facebook.katana.LoginActivity");
+                            startActivity(intent);
+                        }
+                        else if (value > 340 && quad == 3)
+                        {
+                            //try youtube launch
+                            progressCount++;
+
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" ));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);}
+                            catch (ActivityNotFoundException e) {
+                                // youtube is not installed.Will be opened in other available apps
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtube.com/watch?v="));
+                                startActivity(i);}
+                        }
+                        else if (value > 340 && quad == 4)
+                        {
+                            progressCount++;
+                            Intent myIntent = new Intent(this, MediaService.class);
+                            startActivity(myIntent);
+                        }
+
+                        Log.d(TAG, "received analog value: " + value + " pin analog id: " + analogPinId + " digital Id: " + index);
+                    } else if (index == 9)
                     {
                         System.out.println("INDEX of POTENTIAL "+index+" AND VALAUE"+value);
                         if (value < 400) {
                             progressCount++;
                             isStretched = true;
                         }
-
-
                     }
                         else {
                         Log.d(TAG, "Warning: received pinstate for unknown analog pin id: " + index);
